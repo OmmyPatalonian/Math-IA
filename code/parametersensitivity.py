@@ -1,10 +1,13 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 def A(x, k=0.0346, x0=-30.37):
     return 100/(1+np.exp(-k*(x - x0)))
 
 def thr_for_C(C, lam, mu, xmin=0, xmax=160):
+    # different equation depending on if consistency >= 70
     rhs = (100 - mu*np.linspace(xmin,xmax,20001)) if C>=70 else (100 + lam*(70-C) - mu*np.linspace(xmin,xmax,20001))
     xs = np.linspace(xmin, xmax, 20001)
     diff = A(xs) - rhs
@@ -17,6 +20,7 @@ def thr_for_C(C, lam, mu, xmin=0, xmax=160):
 
 Cs = np.linspace(50, 100, 51)
 
+### test how mu affects thresholds
 mus = [0.05, 0.10, 0.20]
 plt.figure()
 for mu in mus:
@@ -29,6 +33,7 @@ plt.legend(); plt.tight_layout()
 plt.savefig("parameter_sensitivity_varying_mu.png", dpi=300, bbox_inches='tight')
 print("Saved 'parameter_sensitivity_varying_mu.png'")
 
+### test how lambda affects thresholds
 lams = [0.5, 1.0, 2.0]
 plt.figure()
 for lam in lams:

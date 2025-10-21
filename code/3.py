@@ -1,3 +1,4 @@
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -22,6 +23,7 @@ def A_of_x(x):
 def ramp(u):
     return np.maximum(0.0, u)
 
+### loss function
 def L_loss(x, C):
     return ramp(100.0 - A_of_x(x)) + lam * ramp(70.0 - C) - mu * x
 
@@ -36,12 +38,11 @@ c0 = plt.contour(X, C, L_vals, levels=[0.0], linewidths=2)
 plt.clabel(c0, fmt={0.0:"L=0"}, inline=True, fontsize=9)
 plt.xlabel("WPM (x)")
 plt.ylabel("Consistency (C)")
-plt.title("Figure 3: Acceptable Region (L(x,C) ≤ 0)")
+plt.title("Acceptable Region (L(x,C) ≤ 0)")
 plt.colorbar(cs, label="L(x,C)")
 plt.tight_layout()
 plt.savefig("figure_3_acceptable_region.png", dpi=300, bbox_inches='tight')
 print("Saved Figure 3 as 'figure_3_acceptable_region.png'")
-
 
 def threshold_x_for_C(C_val):
     def F_case3(x):
@@ -79,7 +80,7 @@ if mask.any():
     plt.scatter(Cs[mask], np.full(mask.sum(), np.nanmean(x_thr)), s=1) 
 plt.xlabel("Consistency (C)")
 plt.ylabel("Threshold WPM  x_thr(C)")
-plt.title("Figure 4: Threshold Target Speed vs Consistency")
+plt.title("Threshold Target Speed vs Consistency")
 plt.tight_layout()
 plt.savefig("figure_4_threshold_speed.png", dpi=300, bbox_inches='tight')
 print("Saved Figure 4 as 'figure_4_threshold_speed.png'")
@@ -118,7 +119,7 @@ for i, C_val in enumerate(C_values):
 plt.axhline(0.0, linestyle="--", linewidth=1)
 plt.xlabel("WPM (x)")
 plt.ylabel("Loss  L(x,C)")
-plt.title("Figure 5: Loss Cross-sections at Fixed Consistency")
+plt.title("Loss Cross-sections at Fixed Consistency")
 plt.legend()
 plt.tight_layout()
 plt.savefig("figure_5_loss_cross_sections.png", dpi=300, bbox_inches='tight')

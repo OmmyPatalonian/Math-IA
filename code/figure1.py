@@ -1,3 +1,4 @@
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,10 +6,12 @@ import matplotlib.pyplot as plt
 path = r"C:\Users\ompar\Downloads\math IA\Math IA - Sheet1.csv"
 df = pd.read_csv(path)
 
+
 for col in ["Grade","WPM","Accuracy","Consistency"]:
     df[col] = pd.to_numeric(df[col], errors="coerce")
 df = df.dropna(subset=["WPM","Accuracy"]).reset_index(drop=True)
 
+### create bins based on wpm range (rounds to nearest 10)
 wpm_min = int(np.floor(df["WPM"].min()/10)*10)
 wpm_max = int(np.ceil(df["WPM"].max()/10)*10)
 bins = np.arange(wpm_min, wpm_max+10, 10)
@@ -37,7 +40,6 @@ def merge_sparse(d):
             left = counts.iloc[i-1]
             right = counts.iloc[i+1]
             target = idx[i-1] if left <= right else idx[i+1]
-        
     
         d = d.copy()
         d["Bin"] = d["Bin"].replace(b, target)
@@ -49,6 +51,7 @@ def merge_sparse(d):
 
 df = merge_sparse(df)
 
+
 summary = (
     df.groupby("Bin", observed=True)
       .agg(MedianAccuracy=("Accuracy","median"),
@@ -58,6 +61,7 @@ summary = (
       .sort_values("Bin")
 )
 
+### find where accuracy plateaus 
 def plateau_onset(summ, threshold=95, tol=2):
     vals = summ["MedianAccuracy"].values
     bins_le = summ["Bin"].astype(int).values
